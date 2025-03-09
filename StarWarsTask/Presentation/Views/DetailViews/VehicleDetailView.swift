@@ -10,6 +10,7 @@ import SwiftUI
 struct VehicleDetailView: View {
 	@ObservedObject var viewModel: VehicleDetailViewModel
 	@EnvironmentObject var container: DependencyContainer
+	@EnvironmentObject var router: Router
 	
 	var body: some View {
 		ScrollView {
@@ -72,8 +73,8 @@ private extension VehicleDetailView {
 			RelatedItemsList(
 				items: viewModel.vehiclePilots,
 				rowContent: { RowContentFactory.makePersonRow(for: $0) },
-				destinationView: { person in
-					PersonDetailView(viewModel: container.viewModelFactory.makePersonDetailViewModel(person: person))
+				onItemSelected: { person in
+					router.navigateToDetail(for: person, resourceType: .person)
 				},
 				emptyText: resourceType.emptyText
 			)
@@ -82,8 +83,8 @@ private extension VehicleDetailView {
 			RelatedItemsList(
 				items: viewModel.vehicleFilms,
 				rowContent: { RowContentFactory.makeFilmRow(for: $0) },
-				destinationView: { film in
-					FilmDetailView(viewModel: container.viewModelFactory.makeFilmDetailViewModel(film: film))
+				onItemSelected: { film in
+					router.navigateToDetail(for: film, resourceType: .film)
 				},
 				emptyText: resourceType.emptyText
 			)
@@ -92,17 +93,17 @@ private extension VehicleDetailView {
 			EmptyView()
 		}
 	}
-} 
+}
 
 //MARK: - Preview
 #Preview {
 	let container = DependencyContainer.preview
-
 	let viewModel = container.viewModelFactory.makeVehicleDetailViewModel(vehicle: .preview)
 
 	return NavigationView {
 		VehicleDetailView(viewModel: viewModel)
 	}
 	.environmentObject(container)
+	.environmentObject(Router())
 	.preferredColorScheme(.dark)
 }

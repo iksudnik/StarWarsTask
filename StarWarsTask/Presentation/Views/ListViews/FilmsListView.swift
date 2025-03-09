@@ -18,9 +18,7 @@ struct FilmsListView: View {
             rowContent: { film in
 				RowContentFactory.makeFilmRow(for: film)
             },
-            detailView: { film in
-				FilmDetailView(viewModel: container.viewModelFactory.makeFilmDetailViewModel(film: film))
-            }
+            resourceType: .film
         )
     }
 }
@@ -35,6 +33,6 @@ struct FilmsListView: View {
 		FilmsListView(viewModel: viewModel)
 	}
 	.environmentObject(container)
+	.environmentObject(Router())
 	.preferredColorScheme(.dark)
-
 }

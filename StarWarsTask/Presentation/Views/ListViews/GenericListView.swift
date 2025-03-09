@@ -7,12 +7,13 @@
 
 import SwiftUI
 
-struct GenericListView<T: Hashable & Identifiable, RowContent: View, DetailView: View>: View {
+struct GenericListView<T: Hashable & Identifiable, RowContent: View>: View {
     @ObservedObject var viewModel: BaseListViewModel<T>
+    @EnvironmentObject var router: Router
     
     let title: String
     let rowContent: (T) -> RowContent
-    let detailView: (T) -> DetailView
+    let resourceType: ResourceType
     
     var body: some View {
         LoadingStateView(
@@ -25,7 +26,9 @@ struct GenericListView<T: Hashable & Identifiable, RowContent: View, DetailView:
             content: { items in
                 List {
                     ForEach(items) { item in
-                        NavigationLink(destination: detailView(item)) {
+                        Button {
+                            router.navigateToDetail(for: item, resourceType: resourceType)
+                        } label: {
                             rowContent(item)
                         }
                     }
@@ -62,11 +65,13 @@ struct GenericListView<T: Hashable & Identifiable, RowContent: View, DetailView:
 		connectivityService: connectivityService
 	)
 
-	GenericListView(viewModel: viewModel, title: "Films") { film in
-		Text(film.title)
-	} detailView: { _ in
-		EmptyView()
-	}
+	GenericListView(
+        viewModel: viewModel, 
+        title: "Films",
+        rowContent: { Text($0.title) },
+        resourceType: .film
+    )
+    .environmentObject(Router())
 	.preferredColorScheme(.dark)
 }
 
@@ -78,10 +83,12 @@ struct GenericListView<T: Hashable & Identifiable, RowContent: View, DetailView:
 		connectivityService: connectivityService
 	)
 
-	GenericListView(viewModel: viewModel, title: "Films") { film in
-		Text(film.title)
-	} detailView: { _ in
-		EmptyView()
-	}
+	GenericListView(
+		viewModel: viewModel,
+		title: "Films",
+		rowContent: { Text($0.title) },
+		resourceType: .film
+	)
+	.environmentObject(Router())
 	.preferredColorScheme(.dark)
 }

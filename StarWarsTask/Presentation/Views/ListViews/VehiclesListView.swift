@@ -18,9 +18,7 @@ struct VehiclesListView: View {
             rowContent: { vehicle in
 				RowContentFactory.makeVehicleRow(for: vehicle)
             },
-            detailView: { vehicle in
-				VehicleDetailView(viewModel: container.viewModelFactory.makeVehicleDetailViewModel(vehicle: vehicle))
-            }
+            resourceType: .vehicle
         )
     }
 }
@@ -35,5 +33,6 @@ struct VehiclesListView: View {
 		VehiclesListView(viewModel: viewModel)
 	}
 	.environmentObject(container)
+	.environmentObject(Router())
 	.preferredColorScheme(.dark)
 }

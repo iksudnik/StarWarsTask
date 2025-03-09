@@ -10,6 +10,7 @@ import SwiftUI
 struct FilmDetailView: View {
 	@ObservedObject var viewModel: FilmDetailViewModel
 	@EnvironmentObject var container: DependencyContainer
+	@EnvironmentObject var router: Router
 
 	var body: some View {
 		ScrollView {
@@ -65,8 +66,8 @@ private extension FilmDetailView {
 			RelatedItemsList(
 				items: viewModel.filmCharacters,
 				rowContent: { RowContentFactory.makePersonRow(for: $0) },
-				destinationView: { person in
-					PersonDetailView(viewModel: container.viewModelFactory.makePersonDetailViewModel(person: person))
+				onItemSelected: { person in
+					router.navigateToDetail(for: person, resourceType: .person)
 				},
 				emptyText: resourceType.emptyText
 			)
@@ -75,8 +76,8 @@ private extension FilmDetailView {
 			RelatedItemsList(
 				items: viewModel.filmPlanets,
 				rowContent: { RowContentFactory.makePlanetRow(for: $0) },
-				destinationView: { planet in
-					PlanetDetailView(viewModel: container.viewModelFactory.makePlanetDetailViewModel(planet: planet))
+				onItemSelected: { planet in
+					router.navigateToDetail(for: planet, resourceType: .planet)
 				},
 				emptyText: resourceType.emptyText
 			)
@@ -85,8 +86,8 @@ private extension FilmDetailView {
 			RelatedItemsList(
 				items: viewModel.filmStarships,
 				rowContent: { RowContentFactory.makeStarshipRow(for: $0) },
-				destinationView: { starship in
-					StarshipDetailView(viewModel: container.viewModelFactory.makeStarshipDetailViewModel(starship: starship))
+				onItemSelected: { starship in
+					router.navigateToDetail(for: starship, resourceType: .starship)
 				},
 				emptyText: resourceType.emptyText
 			)
@@ -95,8 +96,8 @@ private extension FilmDetailView {
 			RelatedItemsList(
 				items: viewModel.filmVehicles,
 				rowContent: { RowContentFactory.makeVehicleRow(for: $0) },
-				destinationView: { vehicle in
-					VehicleDetailView(viewModel: container.viewModelFactory.makeVehicleDetailViewModel(vehicle: vehicle))
+				onItemSelected: { vehicle in
+					router.navigateToDetail(for: vehicle, resourceType: .vehicle)
 				},
 				emptyText: resourceType.emptyText
 			)
@@ -105,8 +106,8 @@ private extension FilmDetailView {
 			RelatedItemsList(
 				items: viewModel.filmSpecies,
 				rowContent: { RowContentFactory.makeSpeciesRow(for: $0) },
-				destinationView: { species in
-					SpeciesDetailView(viewModel: container.viewModelFactory.makeSpeciesDetailViewModel(species: species))
+				onItemSelected: { species in
+					router.navigateToDetail(for: species, resourceType: .species)
 				},
 				emptyText: resourceType.emptyText
 			)
@@ -120,12 +121,12 @@ private extension FilmDetailView {
 //MARK: - Preview
 #Preview {
 	let container = DependencyContainer.preview
-
 	let viewModel = container.viewModelFactory.makeFilmDetailViewModel(film: .preview)
 
 	return NavigationView {
 		FilmDetailView(viewModel: viewModel)
 	}
 	.environmentObject(container)
+	.environmentObject(Router())
 	.preferredColorScheme(.dark)
 }

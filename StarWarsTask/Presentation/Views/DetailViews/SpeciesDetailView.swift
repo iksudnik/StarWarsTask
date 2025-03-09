@@ -10,6 +10,7 @@ import SwiftUI
 struct SpeciesDetailView: View {
     @ObservedObject var viewModel: SpeciesDetailViewModel
     @EnvironmentObject var container: DependencyContainer
+    @EnvironmentObject var router: Router
     
     var body: some View {
         ScrollView {
@@ -67,8 +68,8 @@ private extension SpeciesDetailView {
             RelatedItemsList(
                 items: viewModel.relatedPeople,
                 rowContent: { RowContentFactory.makePersonRow(for: $0) },
-                destinationView: { person in
-					PersonDetailView(viewModel: container.viewModelFactory.makePersonDetailViewModel(person: person))
+                onItemSelected: { person in
+                    router.navigateToDetail(for: person, resourceType: .person)
                 },
                 emptyText: resourceType.emptyText
             )
@@ -78,8 +79,8 @@ private extension SpeciesDetailView {
                 RelatedItemsList(
                     items: [homeworld],
                     rowContent: { RowContentFactory.makePlanetRow(for: $0) },
-                    destinationView: { planet in
-						PlanetDetailView(viewModel: container.viewModelFactory.makePlanetDetailViewModel(planet: planet))
+                    onItemSelected: { planet in
+                        router.navigateToDetail(for: planet, resourceType: .planet)
                     },
                     emptyText: resourceType.emptyText
                 )
@@ -91,8 +92,8 @@ private extension SpeciesDetailView {
             RelatedItemsList(
                 items: viewModel.relatedFilms,
                 rowContent: { RowContentFactory.makeFilmRow(for: $0) },
-                destinationView: { film in
-					FilmDetailView(viewModel: container.viewModelFactory.makeFilmDetailViewModel(film: film))
+                onItemSelected: { film in
+                    router.navigateToDetail(for: film, resourceType: .film)
                 },
                 emptyText: resourceType.emptyText
             )
@@ -101,7 +102,7 @@ private extension SpeciesDetailView {
             EmptyView()
         }
     }
-} 
+}
 
 //MARK: - Preview
 #Preview {
@@ -113,5 +114,6 @@ private extension SpeciesDetailView {
 		SpeciesDetailView(viewModel: viewModel)
 	}
 	.environmentObject(container)
+	.environmentObject(Router())
 	.preferredColorScheme(.dark)
 }

@@ -19,9 +19,7 @@ struct SpeciesListView: View {
             rowContent: { species in
 				RowContentFactory.makeSpeciesRow(for: species)
             },
-            detailView: { species in
-				SpeciesDetailView(viewModel: container.viewModelFactory.makeSpeciesDetailViewModel(species: species))
-            }
+            resourceType: .species
         )
     }
 }
@@ -36,5 +34,6 @@ struct SpeciesListView: View {
 		SpeciesListView(viewModel: viewModel)
 	}
 	.environmentObject(container)
+	.environmentObject(Router())
 	.preferredColorScheme(.dark)
 }

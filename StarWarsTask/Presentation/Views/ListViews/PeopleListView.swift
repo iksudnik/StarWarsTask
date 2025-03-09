@@ -18,9 +18,7 @@ struct PeopleListView: View {
             rowContent: { person in
 				RowContentFactory.makePersonRow(for: person)
             },
-            detailView: { person in
-				PersonDetailView(viewModel: container.viewModelFactory.makePersonDetailViewModel(person: person))
-            }
+            resourceType: .person
         )
     }
 }
@@ -35,5 +33,6 @@ struct PeopleListView: View {
         PeopleListView(viewModel: viewModel)
     }
 	.environmentObject(container)
+	.environmentObject(Router())
 	.preferredColorScheme(.dark)
 }

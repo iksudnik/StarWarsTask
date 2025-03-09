@@ -17,7 +17,7 @@ struct StarWarsTaskApp: App {
 	
     var body: some Scene {
         WindowGroup {
-			DashboardView()
+			MainNavigationView()
 				.environmentObject(DependencyContainer())
 				.preferredColorScheme(.dark) // Force dark theme to look more in StarWars style
         }

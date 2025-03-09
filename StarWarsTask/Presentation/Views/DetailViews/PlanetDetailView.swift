@@ -10,6 +10,7 @@ import SwiftUI
 struct PlanetDetailView: View {
 	@ObservedObject var viewModel: PlanetDetailViewModel
 	@EnvironmentObject var container: DependencyContainer
+	@EnvironmentObject var router: Router
 
 	var body: some View {
 		ScrollView {
@@ -67,8 +68,8 @@ private extension PlanetDetailView {
 			RelatedItemsList(
 				items: viewModel.planetResidents,
 				rowContent: { RowContentFactory.makePersonRow(for: $0) },
-				destinationView: { person in
-					PersonDetailView(viewModel: container.viewModelFactory.makePersonDetailViewModel(person: person))
+				onItemSelected: { person in
+					router.navigateToDetail(for: person, resourceType: .person)
 				},
 				emptyText: resourceType.emptyText
 			)
@@ -77,8 +78,8 @@ private extension PlanetDetailView {
 			RelatedItemsList(
 				items: viewModel.planetFilms,
 				rowContent: { RowContentFactory.makeFilmRow(for: $0) },
-				destinationView: { film in
-					FilmDetailView(viewModel: container.viewModelFactory.makeFilmDetailViewModel(film: film))
+				onItemSelected: { film in
+					router.navigateToDetail(for: film, resourceType: .film)
 				},
 				emptyText: resourceType.emptyText
 			)
@@ -92,12 +93,12 @@ private extension PlanetDetailView {
 //MARK: - Preview
 #Preview {
 	let container = DependencyContainer.preview
-
 	let viewModel = container.viewModelFactory.makePlanetDetailViewModel(planet: .preview)
 
 	return NavigationView {
 		PlanetDetailView(viewModel: viewModel)
 	}
 	.environmentObject(container)
+	.environmentObject(Router())
 	.preferredColorScheme(.dark)
 }

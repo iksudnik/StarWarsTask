@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct RelatedItemsList<T: Identifiable, RowContent: View, DestinationView: View>: View {
+struct RelatedItemsList<T: Identifiable>: View {
     let items: [T]
-    let rowContent: (T) -> RowContent?
-    let destinationView: (T) -> DestinationView
+    let rowContent: (T) -> AnyView
+    let onItemSelected: (T) -> Void
     let emptyText: String
     
     var body: some View {
@@ -22,13 +22,29 @@ struct RelatedItemsList<T: Identifiable, RowContent: View, DestinationView: View
                     .padding(.horizontal)
 			} else {
 				ForEach(items) { item in
-					NavigationLink(destination: destinationView(item)) {
-						if let rowContent = rowContent(item) {
-							rowContent
-						}
-					}
+					Button {
+                        onItemSelected(item)
+                    } label: {
+                        rowContent(item)
+                    }
+                    .buttonStyle(PlainButtonStyle())
 				}
 			}
 		}
+    }
+}
+
+// MARK: - Convenience extensions
+extension RelatedItemsList {
+    init<RowView: View>(
+        items: [T], 
+        rowContent: @escaping (T) -> RowView, 
+        onItemSelected: @escaping (T) -> Void,
+        emptyText: String
+    ) {
+        self.items = items
+        self.rowContent = { AnyView(rowContent($0)) }
+        self.onItemSelected = onItemSelected
+        self.emptyText = emptyText
     }
 }

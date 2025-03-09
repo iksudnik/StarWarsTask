@@ -18,9 +18,7 @@ struct PlanetsListView: View {
             rowContent: { planet in
 				RowContentFactory.makePlanetRow(for: planet)
             },
-            detailView: { planet in
-				PlanetDetailView(viewModel: container.viewModelFactory.makePlanetDetailViewModel(planet: planet))
-            }
+            resourceType: .planet
         )
     }
 }
@@ -35,5 +33,6 @@ struct PlanetsListView: View {
 		PlanetsListView(viewModel: viewModel)
 	}
 	.environmentObject(container)
+	.environmentObject(Router())
 	.preferredColorScheme(.dark)
 }

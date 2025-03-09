@@ -18,9 +18,7 @@ struct StarshipsListView: View {
             rowContent: { starship in
 				RowContentFactory.makeStarshipRow(for: starship)
             },
-            detailView: { starship in
-				StarshipDetailView(viewModel: container.viewModelFactory.makeStarshipDetailViewModel(starship: starship))
-            }
+            resourceType: .starship
         )
     }
 }
@@ -35,5 +33,6 @@ struct StarshipsListView: View {
 		StarshipsListView(viewModel: viewModel)
 	}
 	.environmentObject(container)
+	.environmentObject(Router())
 	.preferredColorScheme(.dark)
 }

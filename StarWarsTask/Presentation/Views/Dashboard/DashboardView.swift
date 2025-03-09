@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DashboardView: View {
     @EnvironmentObject var container: DependencyContainer
-    @State private var selectedCategory: ResourceType?
+    @EnvironmentObject var router: Router
     
     private let columns = [
 		GridItem(
@@ -19,71 +19,49 @@ struct DashboardView: View {
     ]
     
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    // Title banner
-                    VStack {
-                        Text(Localized.Titles.starWarsHeader)
-                            .font(.largeTitle)
-                            .fontWeight(.black)
-							.foregroundColor(AppColors.accent)
-                            .padding(.top)
-                        
-						Text(Localized.Titles.byJakala)
-                            .font(.headline)
-                            .foregroundColor(AppColors.accent.opacity(0.8))
-                            .padding(.bottom)
-                    }
-                    .frame(maxWidth: .infinity)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                // Title banner
+                VStack {
+                    Text(Localized.Titles.starWarsHeader)
+                        .font(.largeTitle)
+                        .fontWeight(.black)
+                        .foregroundColor(AppColors.accent)
+                        .padding(.top)
                     
-                    LazyVGrid(columns: columns, spacing: 20) {
-                        ForEach(ResourceType.allCasesOrdered, id: \.self) { category in
-                            NavigationLink(value: category) {
-                                CategoryGridItem(resourceType: category)
-                            }
-                            .buttonStyle(PlainButtonStyle())
+                    Text(Localized.Titles.byJakala)
+                        .font(.headline)
+                        .foregroundColor(AppColors.accent.opacity(0.8))
+                        .padding(.bottom)
+                }
+                .frame(maxWidth: .infinity)
+                
+                LazyVGrid(columns: columns, spacing: 20) {
+					ForEach(ResourceType.allCases, id: \.self) { category in
+                        Button {
+                            router.navigateToList(for: category)
+                        } label: {
+                            CategoryGridItem(resourceType: category)
                         }
+                        .buttonStyle(PlainButtonStyle())
                     }
-                    .padding(.horizontal)
                 }
-                .padding(.vertical)
+                .padding(.horizontal)
             }
-            .background(
-                AppColors.background
-                    .ignoresSafeArea()
-            )
-            .navigationDestination(for: ResourceType.self) { category in
-                switch category {
-                case .person:
-                    PeopleListView(viewModel: container.viewModelFactory.makePeopleListViewModel())
-                case .planet:
-                    PlanetsListView(viewModel: container.viewModelFactory.makePlanetsListViewModel())
-                case .starship:
-                    StarshipsListView(viewModel: container.viewModelFactory.makeStarshipsListViewModel())
-                case .vehicle:
-                    VehiclesListView(viewModel: container.viewModelFactory.makeVehiclesListViewModel())
-                case .species:
-                    SpeciesListView(viewModel: container.viewModelFactory.makeSpeciesListViewModel())
-                case .film:
-                    FilmsListView(viewModel: container.viewModelFactory.makeFilmsListViewModel())
-                }
-            }
+            .padding(.vertical)
         }
+        .background(
+            AppColors.background
+                .ignoresSafeArea()
+        )
     }
-}
-
-// MARK: - ResourceType
-private extension ResourceType {
-	static var allCasesOrdered: [ResourceType] {
-		return [.film, .planet, .person, .starship, .vehicle, .species]
-	}
 }
 
 
 // MARK: - Preview
 #Preview {
     DashboardView()
-		.environmentObject(DependencyContainer.preview)
+        .environmentObject(DependencyContainer.preview)
+        .environmentObject(Router())
         .preferredColorScheme(.dark)
 } 
