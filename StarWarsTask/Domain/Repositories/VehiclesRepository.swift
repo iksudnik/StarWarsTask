@@ -14,7 +14,7 @@ protocol VehiclesRepositoryProtocol {
 }
 
 final class VehiclesRepository: VehiclesRepositoryProtocol {
-    private let genericRepository: BaseRepository<Vehicle>
+    private let genericRepository: BaseRepository<VehicleDTO, Vehicle>
     
     private let vehiclesListCacheKey = "vehicles_list"
     private func vehicleCacheKey(id: Int) -> String {
@@ -29,10 +29,16 @@ final class VehiclesRepository: VehiclesRepositoryProtocol {
 		cacheService: StorageServiceProtocol,
 		connectivityService: ConnectivityServiceProtocol
 	) {
-        self.genericRepository = BaseRepository<Vehicle>(
+        self.genericRepository = BaseRepository<VehicleDTO, Vehicle>(
             apiService: apiService,
             cacheService: cacheService,
-			connectivityService: connectivityService
+			connectivityService: connectivityService,
+            mapDTO: { dto in
+				ModelMapper.mapVehicle(dto)
+            },
+            mapDTOList: { dtoList in
+                ModelMapper.mapVehicles(dtoList)
+            }
         )
     }
     

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct GenericListView<T, RowContent: View, DetailView: View>: View where T: Identifiable, T: Codable {
+struct GenericListView<T: Hashable & Identifiable, RowContent: View, DetailView: View>: View {
     @ObservedObject var viewModel: BaseListViewModel<T>
     
     let title: String

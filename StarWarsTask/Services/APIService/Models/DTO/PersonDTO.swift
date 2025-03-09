@@ -1,5 +1,5 @@
 //
-//  Person.swift
+//  PersonDTO.swift
 //  StarWarsTask
 //
 //  Created by Ilja Sudnik on 08.03.2025.
@@ -7,8 +7,7 @@
 
 import Foundation
 
-struct Person: Identifiable, Hashable {
-	var id: String { url }
+struct PersonDTO: Codable {
     let name: String
     let height: String
     let mass: String
@@ -23,4 +22,13 @@ struct Person: Identifiable, Hashable {
     let vehicles: [String]
     let starships: [String]
     let url: String
+    
+    enum CodingKeys: String, CodingKey {
+        case name, height, mass, homeworld, films, species, vehicles, starships, url
+        case hairColor = "hair_color"
+        case skinColor = "skin_color"
+        case eyeColor = "eye_color"
+        case birthYear = "birth_year"
+        case gender
+    }
 } 

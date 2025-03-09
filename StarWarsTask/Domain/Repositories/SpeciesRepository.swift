@@ -14,7 +14,7 @@ protocol SpeciesRepositoryProtocol {
 }
 
 final class SpeciesRepository: SpeciesRepositoryProtocol {
-    private let genericRepository: BaseRepository<Species>
+    private let genericRepository: BaseRepository<SpeciesDTO, Species>
     
     private let speciesListCacheKey = "species_list"
     private func speciesCacheKey(id: Int) -> String {
@@ -29,10 +29,16 @@ final class SpeciesRepository: SpeciesRepositoryProtocol {
 		cacheService: StorageServiceProtocol,
 		connectivityService: ConnectivityServiceProtocol
 	) {
-        self.genericRepository = BaseRepository<Species>(
+        self.genericRepository = BaseRepository<SpeciesDTO, Species>(
             apiService: apiService,
             cacheService: cacheService,
-			connectivityService: connectivityService
+			connectivityService: connectivityService,
+            mapDTO: { dto in
+				ModelMapper.mapSpecies(dto)
+            },
+            mapDTOList: { dtoList in
+				ModelMapper.mapSpeciesList(dtoList)
+            }
         )
     }
     

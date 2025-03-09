@@ -1,5 +1,5 @@
 //
-//  Film.swift
+//  FilmDTO.swift
 //  StarWarsTask
 //
 //  Created by Ilja Sudnik on 08.03.2025.
@@ -7,8 +7,7 @@
 
 import Foundation
 
-struct Film: Identifiable, Hashable {
-	var id: String { url }
+struct FilmDTO: Codable {
     let title: String
     let episodeId: Int
     let openingCrawl: String
@@ -21,4 +20,11 @@ struct Film: Identifiable, Hashable {
     let vehicles: [String]
     let species: [String]
     let url: String
+    
+    enum CodingKeys: String, CodingKey {
+        case title, director, producer, characters, planets, starships, vehicles, species, url
+        case episodeId = "episode_id"
+        case openingCrawl = "opening_crawl"
+        case releaseDate = "release_date"
+    }
 } 

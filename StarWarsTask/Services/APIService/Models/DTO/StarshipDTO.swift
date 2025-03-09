@@ -1,5 +1,5 @@
 //
-//  Starship.swift
+//  StarshipDTO.swift
 //  StarWarsTask
 //
 //  Created by Ilja Sudnik on 08.03.2025.
@@ -7,8 +7,7 @@
 
 import Foundation
 
-struct Starship: Identifiable, Hashable {
-	var id: String { url }
+struct StarshipDTO: Codable {
     let name: String
     let model: String
     let manufacturer: String
@@ -25,4 +24,13 @@ struct Starship: Identifiable, Hashable {
     let pilots: [String]
     let films: [String]
     let url: String
+    
+    enum CodingKeys: String, CodingKey {
+        case name, model, manufacturer, length, crew, passengers, consumables, MGLT, pilots, films, url
+        case costInCredits = "cost_in_credits"
+        case maxAtmospheringSpeed = "max_atmosphering_speed"
+        case cargoCapacity = "cargo_capacity"
+        case hyperdriveRating = "hyperdrive_rating"
+        case starshipClass = "starship_class"
+    }
 } 

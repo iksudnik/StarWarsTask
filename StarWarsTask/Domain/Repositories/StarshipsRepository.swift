@@ -14,7 +14,7 @@ protocol StarshipsRepositoryProtocol {
 }
 
 final class StarshipsRepository: StarshipsRepositoryProtocol {
-    private let genericRepository: BaseRepository<Starship>
+    private let genericRepository: BaseRepository<StarshipDTO, Starship>
     
     private let starshipsListCacheKey = "starships_list"
     private func starshipCacheKey(id: Int) -> String {
@@ -29,10 +29,16 @@ final class StarshipsRepository: StarshipsRepositoryProtocol {
 		cacheService: StorageServiceProtocol,
 		connectivityService: ConnectivityServiceProtocol
 	) {
-        self.genericRepository = BaseRepository<Starship>(
+        self.genericRepository = BaseRepository<StarshipDTO, Starship>(
             apiService: apiService,
             cacheService: cacheService,
-			connectivityService: connectivityService
+			connectivityService: connectivityService,
+            mapDTO: { dto in
+				ModelMapper.mapStarship(dto)
+            },
+            mapDTOList: { dtoList in
+                ModelMapper.mapStarships(dtoList)
+            }
         )
     }
     

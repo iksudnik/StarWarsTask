@@ -14,7 +14,7 @@ protocol PlanetsRepositoryProtocol {
 }
 
 final class PlanetsRepository: PlanetsRepositoryProtocol {
-    private let genericRepository: BaseRepository<Planet>
+    private let genericRepository: BaseRepository<PlanetDTO, Planet>
     
     private let planetsListCacheKey = "planets_list"
     private func planetCacheKey(id: Int) -> String {
@@ -29,10 +29,16 @@ final class PlanetsRepository: PlanetsRepositoryProtocol {
 		cacheService: StorageServiceProtocol,
 		connectivityService: ConnectivityServiceProtocol
 	) {
-        self.genericRepository = BaseRepository<Planet>(
+        self.genericRepository = BaseRepository<PlanetDTO, Planet>(
             apiService: apiService,
             cacheService: cacheService,
-			connectivityService: connectivityService
+			connectivityService: connectivityService,
+            mapDTO: { dto in
+				ModelMapper.mapPlanet(dto)
+            },
+            mapDTOList: { dtoList in
+				ModelMapper.mapPlanets(dtoList)
+            }
         )
     }
     

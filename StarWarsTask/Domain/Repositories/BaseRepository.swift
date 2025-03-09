@@ -8,8 +8,9 @@
 import Foundation
 
 /// Protocol for a generic repository that can work with any data type
-protocol BaseRepositoryProtocol<T> {
-    associatedtype T: Codable
+protocol BaseRepositoryProtocol<DTO, T> {
+    associatedtype DTO: Codable
+    associatedtype T: Identifiable & Hashable
     
     /// Fetches a list of objects with pagination support
 	func fetchList(
@@ -17,7 +18,7 @@ protocol BaseRepositoryProtocol<T> {
 		page: Int,
 		cacheKey: String,
 		forceFetch: Bool
-	) async throws ->  RepositoryFetchResult<T>
+	) async throws -> RepositoryFetchResult<T>
 
     /// Fetches a single object by ID
     func fetchDetail(endpoint: APIEndpoint, id: Int, cacheKey: String) async throws -> T
@@ -26,28 +27,32 @@ protocol BaseRepositoryProtocol<T> {
     func fetchByURL(url: String, cacheKey: String) async throws -> T
 }
 
-/// Structure for storing pagination information
-private struct PaginationInfo: Codable {
-	let totalCount: Int
-	let hasNext: Bool
-	let hasPrevious: Bool
+/// Structure for storing fetched DTO items with pagination information
+private struct DTOFetchPageResult<T: Codable>: Codable {
+	let items: [T]
+	let hasMore: Bool
 	let nextPage: Int?
 }
 
-
-final class BaseRepository<T: Codable>: BaseRepositoryProtocol {
+final class BaseRepository<DTO: Codable, T: Identifiable & Hashable>: BaseRepositoryProtocol {
     private let apiService: APIServiceProtocol
     private let cacheService: StorageServiceProtocol
     private let connectivityService: ConnectivityServiceProtocol
+    private let mapDTO: (DTO) -> T
+    private let mapDTOList: ([DTO]) -> [T]
 
 	init(
 		apiService: APIServiceProtocol,
 		cacheService: StorageServiceProtocol,
-		connectivityService: ConnectivityServiceProtocol
+		connectivityService: ConnectivityServiceProtocol,
+        mapDTO: @escaping (DTO) -> T,
+        mapDTOList: @escaping ([DTO]) -> [T]
 	) {
         self.apiService = apiService
         self.cacheService = cacheService
         self.connectivityService = connectivityService
+        self.mapDTO = mapDTO
+        self.mapDTOList = mapDTOList
     }
     
     // MARK: - Public Methods
@@ -59,55 +64,33 @@ final class BaseRepository<T: Codable>: BaseRepositoryProtocol {
 	) async throws -> RepositoryFetchResult<T> {
 
 		let currentCacheKey = "\(cacheKey)_page_\(page)"
-        let paginationCacheKey = "\(currentCacheKey)_pagination"
         
-        return try await fetchWithCache(
+		let dtoResult = try await fetchWithCache(
             forceFetch: forceFetch,
             cacheKey: currentCacheKey,
             fetchFromAPI: {
-                let response: APIResponse<T> = try await self.apiService.fetch(endpoint: endpoint, page: page)
-
-				// Determine if there's a next page and what its number is
-                var nextPage: Int? = nil
-                if let nextURLString = response.next, let nextURL = URL(string: nextURLString) {
-                    let components = URLComponents(url: nextURL, resolvingAgainstBaseURL: false)
-                    if let pageItem = components?.queryItems?.first(where: { $0.name == "page" }),
-                       let pageString = pageItem.value,
-                       let pageNumber = Int(pageString) {
-                        nextPage = pageNumber
-                    }
-                }
+                let response: APIResponse<DTO> = try await self.apiService.fetch(endpoint: endpoint, page: page)
+                let nextPage: Int? = response.next != nil ? page + 1 : nil
                 
-                // Create pagination information
-                let paginationInfo = PaginationInfo(
-                    totalCount: response.count,
-                    hasNext: response.next != nil,
-                    hasPrevious: response.previous != nil,
+				return DTOFetchPageResult(
+                    items: response.results,
+                    hasMore: response.next != nil,
                     nextPage: nextPage
                 )
-                
-                // Save pagination information
-                try? self.cacheService.save(paginationInfo, forKey: paginationCacheKey)
-                
-				return .init(items: response.results, hasMore: response.next != nil, nextPage: nextPage)
             },
             loadFromCache: {
-                let items: [T] = try self.cacheService.load(forKey: currentCacheKey)
-
-                var hasMore = false
-                var nextPage: Int? = nil
-                if self.cacheService.exists(forKey: paginationCacheKey) {
-                    let paginationInfo: PaginationInfo = try self.cacheService.load(forKey: paginationCacheKey)
-                    hasMore = paginationInfo.hasNext
-                    nextPage = paginationInfo.nextPage
-                }
-
-				return .init(items: items, hasMore: hasMore, nextPage: nextPage)
+				try self.cacheService.load(forKey: currentCacheKey) as DTOFetchPageResult<DTO>
             },
-            saveToCache: { items in
-                try self.cacheService.save(items.items, forKey: currentCacheKey)
+			saveToCache: { (result: DTOFetchPageResult<DTO>) in
+                try self.cacheService.save(result, forKey: currentCacheKey)
             }
         )
+
+		return RepositoryFetchResult<T>(
+			items: mapDTOList(dtoResult.items),
+			hasMore: dtoResult.hasMore,
+			nextPage: dtoResult.nextPage
+		)
     }
     
 	func fetchDetail(
@@ -115,90 +98,89 @@ final class BaseRepository<T: Codable>: BaseRepositoryProtocol {
 		id: Int,
 		cacheKey: String
 	) async throws -> T {
-        return try await fetchWithCache(
+		let dto = try await fetchWithCache(
             forceFetch: false,
             cacheKey: cacheKey,
             fetchFromAPI: {
-				let item: T = try await self.apiService.fetch(endpoint: endpoint, page: 1)
-                return item
+				try await self.apiService.fetch(endpoint: endpoint, page: 1)
             },
             loadFromCache: {
-                return try self.cacheService.load(forKey: cacheKey)
+				try self.cacheService.load(forKey: cacheKey)
             },
-            saveToCache: { item in
+            saveToCache: { (item: DTO) in
                 try self.cacheService.save(item, forKey: cacheKey)
             }
         )
+		return self.mapDTO(dto)
     }
     
-    func fetchByURL(url: String, cacheKey: String) async throws -> T {
-        return try await fetchWithCache(
+	func fetchByURL(url: String, cacheKey: String) async throws -> T {
+        let dto = try await fetchWithCache(
             forceFetch: false,
             cacheKey: cacheKey,
             fetchFromAPI: {
-                let item: T = try await self.apiService.fetchByURL(url: url)
-                return item
+                return try await self.apiService.fetchByURL(url: url)
             },
             loadFromCache: {
                 return try self.cacheService.load(forKey: cacheKey)
             },
-            saveToCache: { item in
+			saveToCache: { (item: DTO) in
                 try self.cacheService.save(item, forKey: cacheKey)
             }
         )
+		return self.mapDTO(dto)
     }
     
     // MARK: - Private Methods
-    private func fetchWithCache<U>(
+    private func fetchWithCache<R: Codable>(
         forceFetch: Bool,
         cacheKey: String,
-        fetchFromAPI: () async throws -> U,
-        loadFromCache: () throws -> U,
-        saveToCache: (U) throws -> Void
-    ) async throws -> U {
-        if !forceFetch && cacheService.exists(forKey: cacheKey) {
+        fetchFromAPI: () async throws -> R,
+        loadFromCache: () throws -> R,
+        saveToCache: (R) throws -> Void
+	) async throws -> R  {
+        // If we're offline and not forcing a fetch, try to get from cache first
+        let isOnline = connectivityService.isConnected
+        if !isOnline && !forceFetch {
             do {
                 return try loadFromCache()
             } catch {
-                print("Warning: Failed to load from cache: \(error.localizedDescription)")
+                throw RepositoryError.noInternetNoCache
             }
         }
         
-		if connectivityService.isConnected {
+        // If we're forcing a fetch, or the cache doesn't exist, fetch from API
+        if forceFetch || !cacheService.exists(forKey: cacheKey) {
             do {
                 let result = try await fetchFromAPI()
-                
-                do {
-                    try saveToCache(result)
-                } catch {
-                    print("Warning: Failed to save to cache: \(error.localizedDescription)")
-                }
-                
+                try saveToCache(result)
                 return result
-            } catch let apiError {
-                let parentError = RepositoryError.apiError(apiError.localizedDescription)
-                return try loadFromCacheOrThrow(cacheKey: cacheKey, loadFromCache: loadFromCache, parentError: parentError)
+            } catch {
+                // If fetching fails but we have cached data, use that as a fallback
+                if cacheService.exists(forKey: cacheKey) {
+                    do {
+                        return try loadFromCache()
+                    } catch {
+                        // If even reading the cache fails, throw the original error
+                        throw error
+                    }
+                }
+                throw error
             }
-        } else {
-			return try loadFromCacheOrThrow(cacheKey: cacheKey, loadFromCache: loadFromCache, parentError: nil)
         }
-    }
-    
-    /// Attempts to load data from cache or throws an appropriate error
-    private func loadFromCacheOrThrow<U>(
-        cacheKey: String, 
-        loadFromCache: () throws -> U, 
-        parentError: Error?
-    ) throws -> U {
-        if cacheService.exists(forKey: cacheKey) {
+        
+        // Otherwise, try the cache first
+        do {
+            return try loadFromCache()
+        } catch {
+            // If cache fails, try fetching instead
             do {
-                return try loadFromCache()
-            } catch let cacheError {
-                // If cache exists but there was an error loading from it
-                throw RepositoryError.cacheError("Failed to load from cache: \(cacheError.localizedDescription)")
+                let result = try await fetchFromAPI()
+                try saveToCache(result)
+                return result
+            } catch {
+                throw error
             }
-        } else {
-            throw parentError ?? RepositoryError.noInternetNoCache
         }
     }
 }

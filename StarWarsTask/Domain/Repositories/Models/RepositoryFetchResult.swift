@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct RepositoryFetchResult<T: Codable> {
+struct RepositoryFetchResult<T: Identifiable & Hashable> {
 	let items: [T]
 	let hasMore: Bool
 	let nextPage: Int?

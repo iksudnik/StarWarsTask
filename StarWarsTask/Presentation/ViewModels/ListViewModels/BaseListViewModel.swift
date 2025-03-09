@@ -9,7 +9,7 @@ import Foundation
 
 /// Base class for all list view models
 @MainActor
-class BaseListViewModel<T>: ObservableObject where T: Identifiable, T: Codable {
+class BaseListViewModel<T: Identifiable & Hashable>: ObservableObject {
     @Published var items: [T] = []
     @Published var isLoadingMore = false
     @Published var hasMorePages = false

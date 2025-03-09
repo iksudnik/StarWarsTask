@@ -14,7 +14,7 @@ protocol FilmsRepositoryProtocol {
 }
 
 final class FilmsRepository: FilmsRepositoryProtocol {
-    private let genericRepository: BaseRepository<Film>
+    private let genericRepository: BaseRepository<FilmDTO, Film>
     
     private let filmsListCacheKey = "films_list"
     private func filmCacheKey(id: Int) -> String {
@@ -29,10 +29,16 @@ final class FilmsRepository: FilmsRepositoryProtocol {
 		cacheService: StorageServiceProtocol,
 		connectivityService: ConnectivityServiceProtocol
 	) {
-        self.genericRepository = BaseRepository<Film>(
+        self.genericRepository = BaseRepository<FilmDTO, Film>(
             apiService: apiService,
             cacheService: cacheService,
-			connectivityService: connectivityService
+			connectivityService: connectivityService,
+            mapDTO: { dto in
+				ModelMapper.mapFilm(dto)
+            },
+            mapDTOList: { dtoList in
+				ModelMapper.mapFilms(dtoList)
+            }
         )
     }
     

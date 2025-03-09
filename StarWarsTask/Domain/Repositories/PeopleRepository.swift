@@ -14,7 +14,7 @@ protocol PeopleRepositoryProtocol {
 }
 
 final class PeopleRepository: PeopleRepositoryProtocol {
-    private let genericRepository: BaseRepository<Person>
+    private let genericRepository: BaseRepository<PersonDTO, Person>
     
     private let peopleListCacheKey = "people_list"
     private func personCacheKey(id: Int) -> String {
@@ -29,10 +29,16 @@ final class PeopleRepository: PeopleRepositoryProtocol {
 		cacheService: StorageServiceProtocol,
 		connectivityService: ConnectivityServiceProtocol
 	) {
-        self.genericRepository = BaseRepository<Person>(
+        self.genericRepository = BaseRepository<PersonDTO, Person>(
             apiService: apiService,
             cacheService: cacheService,
-			connectivityService: connectivityService
+			connectivityService: connectivityService,
+            mapDTO: { dto in
+				ModelMapper.mapPerson(dto)
+            },
+            mapDTOList: { dtoList in
+				ModelMapper.mapPersons(dtoList)
+            }
         )
     }
     
