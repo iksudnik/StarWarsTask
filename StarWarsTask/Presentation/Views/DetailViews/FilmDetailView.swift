@@ -125,7 +125,7 @@ private extension FilmDetailView {
 
 	return NavigationView {
 		FilmDetailView(viewModel: viewModel)
-			.environmentObject(container)
 	}
+	.environmentObject(container)
 	.preferredColorScheme(.dark)
 }

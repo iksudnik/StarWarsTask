@@ -33,7 +33,7 @@ struct PeopleListView: View {
 
     return NavigationView {
         PeopleListView(viewModel: viewModel)
-            .environmentObject(container)
     }
+	.environmentObject(container)
 	.preferredColorScheme(.dark)
 }

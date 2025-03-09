@@ -33,7 +33,7 @@ struct PlanetsListView: View {
 
 	return NavigationView {
 		PlanetsListView(viewModel: viewModel)
-			.environmentObject(container)
 	}
+	.environmentObject(container)
 	.preferredColorScheme(.dark)
 }

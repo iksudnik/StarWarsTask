@@ -97,7 +97,7 @@ private extension PlanetDetailView {
 
 	return NavigationView {
 		PlanetDetailView(viewModel: viewModel)
-			.environmentObject(container)
 	}
+	.environmentObject(container)
 	.preferredColorScheme(.dark)
 }

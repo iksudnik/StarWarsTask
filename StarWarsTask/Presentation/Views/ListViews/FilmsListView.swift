@@ -33,8 +33,8 @@ struct FilmsListView: View {
 
 	return NavigationView {
 		FilmsListView(viewModel: viewModel)
-			.environmentObject(container)
 	}
+	.environmentObject(container)
 	.preferredColorScheme(.dark)
 
 }

@@ -131,7 +131,7 @@ private extension PersonDetailView {
 
 	return NavigationView {
 		PersonDetailView(viewModel: viewModel)
-			.environmentObject(container)
 	}
+	.environmentObject(container)
 	.preferredColorScheme(.dark)
 }

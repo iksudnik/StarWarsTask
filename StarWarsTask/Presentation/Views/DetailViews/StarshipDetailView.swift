@@ -105,7 +105,7 @@ private extension StarshipDetailView {
 
 	return NavigationView {
 		StarshipDetailView(viewModel: viewModel)
-			.environmentObject(container)
 	}
+	.environmentObject(container)
 	.preferredColorScheme(.dark)
 }

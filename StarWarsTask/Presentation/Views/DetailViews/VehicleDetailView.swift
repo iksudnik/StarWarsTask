@@ -102,7 +102,7 @@ private extension VehicleDetailView {
 
 	return NavigationView {
 		VehicleDetailView(viewModel: viewModel)
-			.environmentObject(container)
 	}
+	.environmentObject(container)
 	.preferredColorScheme(.dark)
 }

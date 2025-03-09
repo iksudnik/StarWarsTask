@@ -33,7 +33,7 @@ struct VehiclesListView: View {
 
 	return NavigationView {
 		VehiclesListView(viewModel: viewModel)
-			.environmentObject(container)
 	}
+	.environmentObject(container)
 	.preferredColorScheme(.dark)
 }

@@ -34,7 +34,7 @@ struct SpeciesListView: View {
 
 	return NavigationView {
 		SpeciesListView(viewModel: viewModel)
-			.environmentObject(container)
 	}
+	.environmentObject(container)
 	.preferredColorScheme(.dark)
 }
