@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A53E859E2D7EC43C00FDC853 /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = A53E859D2D7EC43C00FDC853 /* Core */; };
+		A53E85A22D7EC7DB00FDC853 /* Domain in Frameworks */ = {isa = PBXBuildFile; productRef = A53E85A12D7EC7DB00FDC853 /* Domain */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +39,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Packages/Core,
+				Packages/Domain,
 				Resources/Info.plist,
 			);
 			target = A50AA1952D7CC1B60010D630 /* StarWarsTask */;
@@ -70,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A53E85A22D7EC7DB00FDC853 /* Domain in Frameworks */,
 				A53E859E2D7EC43C00FDC853 /* Core in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -132,6 +135,7 @@
 			name = StarWarsTask;
 			packageProductDependencies = (
 				A53E859D2D7EC43C00FDC853 /* Core */,
+				A53E85A12D7EC7DB00FDC853 /* Domain */,
 			);
 			productName = StarWarsTask;
 			productReference = A50AA1962D7CC1B60010D630 /* StarWarsTask.app */;
@@ -217,6 +221,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				A53E859C2D7EC43C00FDC853 /* XCLocalSwiftPackageReference "StarWarsTask/Core" */,
+				A53E85A02D7EC7DB00FDC853 /* XCLocalSwiftPackageReference "StarWarsTask/Packages/Domain" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A50AA1972D7CC1B60010D630 /* Products */;
@@ -587,12 +592,20 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = StarWarsTask/Core;
 		};
+		A53E85A02D7EC7DB00FDC853 /* XCLocalSwiftPackageReference "StarWarsTask/Packages/Domain" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = StarWarsTask/Packages/Domain;
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		A53E859D2D7EC43C00FDC853 /* Core */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Core;
+		};
+		A53E85A12D7EC7DB00FDC853 /* Domain */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Domain;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

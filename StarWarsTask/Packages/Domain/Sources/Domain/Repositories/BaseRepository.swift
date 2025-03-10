@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Core
 
 /// Protocol for a generic repository that can work with any data type
 protocol BaseRepositoryProtocol<DTO, T> {

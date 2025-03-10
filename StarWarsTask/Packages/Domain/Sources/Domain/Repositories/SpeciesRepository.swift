@@ -8,13 +8,13 @@
 import Foundation
 import Core
 
-protocol SpeciesRepositoryProtocol {
+public protocol SpeciesRepositoryProtocol {
     func fetchSpecies(page: Int, forceFetch: Bool) async throws -> RepositoryFetchResult<Species>
     func fetchSpeciesDetail(id: Int) async throws -> Species
     func fetchSpeciesByURL(url: String) async throws -> Species
 }
 
-final class SpeciesRepository: SpeciesRepositoryProtocol {
+public final class SpeciesRepository: SpeciesRepositoryProtocol {
     private let genericRepository: BaseRepository<SpeciesDTO, Species>
     
     private let speciesListCacheKey = "species_list"
@@ -25,7 +25,7 @@ final class SpeciesRepository: SpeciesRepositoryProtocol {
         return "species_url_\(url.hashValue)"
     }
     
-	init(
+	public init(
 		apiService: APIServiceProtocol,
 		cacheService: StorageServiceProtocol,
 		connectivityService: ConnectivityServiceProtocol
@@ -43,7 +43,7 @@ final class SpeciesRepository: SpeciesRepositoryProtocol {
         )
     }
     
-    func fetchSpecies(page: Int, forceFetch: Bool) async throws -> RepositoryFetchResult<Species> {
+	public func fetchSpecies(page: Int, forceFetch: Bool) async throws -> RepositoryFetchResult<Species> {
         let result = try await genericRepository.fetchList(
             endpoint: .species,
             page: page,
@@ -53,7 +53,7 @@ final class SpeciesRepository: SpeciesRepositoryProtocol {
 		return .init(items: result.items, hasMore: result.hasMore, nextPage: result.nextPage)
     }
     
-    func fetchSpeciesDetail(id: Int) async throws -> Species {
+	public func fetchSpeciesDetail(id: Int) async throws -> Species {
         return try await genericRepository.fetchDetail(
             endpoint: .speciesDetail(id: id),
             id: id,
@@ -61,7 +61,7 @@ final class SpeciesRepository: SpeciesRepositoryProtocol {
         )
     }
     
-    func fetchSpeciesByURL(url: String) async throws -> Species {
+	public func fetchSpeciesByURL(url: String) async throws -> Species {
         return try await genericRepository.fetchByURL(
             url: url,
             cacheKey: speciesURLCacheKey(url: url)

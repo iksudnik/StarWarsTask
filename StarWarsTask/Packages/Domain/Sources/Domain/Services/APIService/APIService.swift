@@ -7,16 +7,16 @@
 
 import Foundation
 
-protocol APIServiceProtocol {
+public protocol APIServiceProtocol {
 	func fetch<T: Decodable>(endpoint: APIEndpoint, page: Int) async throws -> T
 	func fetchByURL<T: Decodable>(url: String) async throws -> T
 }
 
 /// Simple implementation of api service
-final class APIService: APIServiceProtocol {
+public final class APIService: APIServiceProtocol {
 	private let session: URLSession
 
-	init(session: URLSession? = nil) {
+	public init(session: URLSession? = nil) {
 		 if let session = session {
             self.session = session
         } else {
@@ -26,7 +26,7 @@ final class APIService: APIServiceProtocol {
         }
 	}
 
-	func fetch<T: Decodable>(endpoint: APIEndpoint, page: Int) async throws -> T {
+	public func fetch<T: Decodable>(endpoint: APIEndpoint, page: Int) async throws -> T {
 		var urlComponents = URLComponents(string: endpoint.urlString)
 		urlComponents?.queryItems = [URLQueryItem(name: "page", value: "\(page)")]
 
@@ -38,7 +38,7 @@ final class APIService: APIServiceProtocol {
 	}
 
 
-	func fetchByURL<T: Decodable>(url: String) async throws -> T {
+	public func fetchByURL<T: Decodable>(url: String) async throws -> T {
 		guard let url = URL(string: url) else {
 			throw APIError.invalidURL
 		}

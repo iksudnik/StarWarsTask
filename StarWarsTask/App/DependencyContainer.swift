@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import Core
+import Domain
 
 /// Simple realization of dependency container for using in Views
 /// Personally I prefer this realization https://github.com/pointfreeco/swift-dependencies

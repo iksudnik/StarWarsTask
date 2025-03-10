@@ -8,13 +8,13 @@
 import Foundation
 import Core
 
-protocol PeopleRepositoryProtocol {
+public protocol PeopleRepositoryProtocol {
     func fetchPeople(page: Int, forceFetch: Bool) async throws -> RepositoryFetchResult<Person>
     func fetchPerson(id: Int) async throws -> Person
     func fetchPersonByURL(url: String) async throws -> Person
 }
 
-final class PeopleRepository: PeopleRepositoryProtocol {
+public final class PeopleRepository: PeopleRepositoryProtocol {
     private let genericRepository: BaseRepository<PersonDTO, Person>
     
     private let peopleListCacheKey = "people_list"
@@ -25,7 +25,7 @@ final class PeopleRepository: PeopleRepositoryProtocol {
         return "person_url_\(url.hashValue)"
     }
     
-	init(
+	public init(
 		apiService: APIServiceProtocol,
 		cacheService: StorageServiceProtocol,
 		connectivityService: ConnectivityServiceProtocol
@@ -43,7 +43,7 @@ final class PeopleRepository: PeopleRepositoryProtocol {
         )
     }
     
-    func fetchPeople(page: Int, forceFetch: Bool) async throws -> RepositoryFetchResult<Person> {
+	public func fetchPeople(page: Int, forceFetch: Bool) async throws -> RepositoryFetchResult<Person> {
         let result = try await genericRepository.fetchList(
             endpoint: .people,
             page: page,
@@ -53,7 +53,7 @@ final class PeopleRepository: PeopleRepositoryProtocol {
 		return .init(items: result.items, hasMore: result.hasMore, nextPage: result.nextPage)
     }
     
-    func fetchPerson(id: Int) async throws -> Person {
+	public func fetchPerson(id: Int) async throws -> Person {
         return try await genericRepository.fetchDetail(
             endpoint: .personDetail(id: id),
             id: id,
@@ -61,7 +61,7 @@ final class PeopleRepository: PeopleRepositoryProtocol {
         )
     }
     
-    func fetchPersonByURL(url: String) async throws -> Person {
+	public func fetchPersonByURL(url: String) async throws -> Person {
         return try await genericRepository.fetchByURL(
             url: url,
             cacheKey: personURLCacheKey(url: url)

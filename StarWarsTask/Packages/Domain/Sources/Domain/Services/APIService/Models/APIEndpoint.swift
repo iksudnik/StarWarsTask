@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum APIEndpoint {
+public enum APIEndpoint {
     case people
     case planets
     case starships

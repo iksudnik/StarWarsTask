@@ -8,13 +8,13 @@
 import Foundation
 import Core
 
-protocol FilmsRepositoryProtocol {
+public protocol FilmsRepositoryProtocol {
 	func fetchFilms(page: Int, forceFetch: Bool) async throws -> RepositoryFetchResult<Film>
     func fetchFilm(id: Int) async throws -> Film
     func fetchFilmByURL(url: String) async throws -> Film
 }
 
-final class FilmsRepository: FilmsRepositoryProtocol {
+public final class FilmsRepository: FilmsRepositoryProtocol {
     private let genericRepository: BaseRepository<FilmDTO, Film>
     
     private let filmsListCacheKey = "films_list"
@@ -25,7 +25,7 @@ final class FilmsRepository: FilmsRepositoryProtocol {
         return "film_url_\(url.hashValue)"
     }
     
-	init(
+	public init(
 		apiService: APIServiceProtocol,
 		cacheService: StorageServiceProtocol,
 		connectivityService: ConnectivityServiceProtocol
@@ -43,7 +43,7 @@ final class FilmsRepository: FilmsRepositoryProtocol {
         )
     }
     
-    func fetchFilms(page: Int, forceFetch: Bool) async throws -> RepositoryFetchResult<Film> {
+	public func fetchFilms(page: Int, forceFetch: Bool) async throws -> RepositoryFetchResult<Film> {
         let result = try await genericRepository.fetchList(
             endpoint: .films,
             page: page,
@@ -52,7 +52,7 @@ final class FilmsRepository: FilmsRepositoryProtocol {
 		return .init(items: result.items, hasMore: result.hasMore, nextPage: result.nextPage)
     }
     
-    func fetchFilm(id: Int) async throws -> Film {
+	public func fetchFilm(id: Int) async throws -> Film {
         return try await genericRepository.fetchDetail(
             endpoint: .filmDetail(id: id),
             id: id,
@@ -60,7 +60,7 @@ final class FilmsRepository: FilmsRepositoryProtocol {
         )
     }
     
-    func fetchFilmByURL(url: String) async throws -> Film {
+	public func fetchFilmByURL(url: String) async throws -> Film {
         return try await genericRepository.fetchByURL(
             url: url,
             cacheKey: filmURLCacheKey(url: url)

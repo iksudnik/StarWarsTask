@@ -8,13 +8,13 @@
 import Foundation
 import Core
 
-protocol VehiclesRepositoryProtocol {
+public protocol VehiclesRepositoryProtocol {
     func fetchVehicles(page: Int, forceFetch: Bool) async throws -> RepositoryFetchResult<Vehicle>
     func fetchVehicle(id: Int) async throws -> Vehicle
     func fetchVehicleByURL(url: String) async throws -> Vehicle
 }
 
-final class VehiclesRepository: VehiclesRepositoryProtocol {
+public final class VehiclesRepository: VehiclesRepositoryProtocol {
     private let genericRepository: BaseRepository<VehicleDTO, Vehicle>
     
     private let vehiclesListCacheKey = "vehicles_list"
@@ -25,7 +25,7 @@ final class VehiclesRepository: VehiclesRepositoryProtocol {
         return "vehicle_url_\(url.hashValue)"
     }
     
-	init(
+	public init(
 		apiService: APIServiceProtocol,
 		cacheService: StorageServiceProtocol,
 		connectivityService: ConnectivityServiceProtocol
@@ -43,7 +43,7 @@ final class VehiclesRepository: VehiclesRepositoryProtocol {
         )
     }
     
-    func fetchVehicles(page: Int, forceFetch: Bool) async throws -> RepositoryFetchResult<Vehicle> {
+	public func fetchVehicles(page: Int, forceFetch: Bool) async throws -> RepositoryFetchResult<Vehicle> {
         let result = try await genericRepository.fetchList(
             endpoint: .vehicles,
             page: page,
@@ -53,7 +53,7 @@ final class VehiclesRepository: VehiclesRepositoryProtocol {
 		return .init(items: result.items, hasMore: result.hasMore, nextPage: result.nextPage)
     }
     
-    func fetchVehicle(id: Int) async throws -> Vehicle {
+	public func fetchVehicle(id: Int) async throws -> Vehicle {
         return try await genericRepository.fetchDetail(
             endpoint: .vehicleDetail(id: id),
             id: id,
@@ -61,7 +61,7 @@ final class VehiclesRepository: VehiclesRepositoryProtocol {
         )
     }
     
-    func fetchVehicleByURL(url: String) async throws -> Vehicle {
+	public func fetchVehicleByURL(url: String) async throws -> Vehicle {
         return try await genericRepository.fetchByURL(
             url: url,
             cacheKey: vehicleURLCacheKey(url: url)

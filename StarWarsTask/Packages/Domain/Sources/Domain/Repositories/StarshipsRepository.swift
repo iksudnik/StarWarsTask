@@ -8,13 +8,13 @@
 import Foundation
 import Core
 
-protocol StarshipsRepositoryProtocol {
+public protocol StarshipsRepositoryProtocol {
     func fetchStarships(page: Int, forceFetch: Bool) async throws -> RepositoryFetchResult<Starship>
     func fetchStarship(id: Int) async throws -> Starship
     func fetchStarshipByURL(url: String) async throws -> Starship
 }
 
-final class StarshipsRepository: StarshipsRepositoryProtocol {
+public final class StarshipsRepository: StarshipsRepositoryProtocol {
     private let genericRepository: BaseRepository<StarshipDTO, Starship>
     
     private let starshipsListCacheKey = "starships_list"
@@ -25,7 +25,7 @@ final class StarshipsRepository: StarshipsRepositoryProtocol {
         return "starship_url_\(url.hashValue)"
     }
     
-	init(
+	public init(
 		apiService: APIServiceProtocol,
 		cacheService: StorageServiceProtocol,
 		connectivityService: ConnectivityServiceProtocol
@@ -43,7 +43,7 @@ final class StarshipsRepository: StarshipsRepositoryProtocol {
         )
     }
     
-    func fetchStarships(page: Int, forceFetch: Bool) async throws -> RepositoryFetchResult<Starship> {
+	public func fetchStarships(page: Int, forceFetch: Bool) async throws -> RepositoryFetchResult<Starship> {
         let result = try await genericRepository.fetchList(
             endpoint: .starships,
             page: page,
@@ -53,7 +53,7 @@ final class StarshipsRepository: StarshipsRepositoryProtocol {
 		return .init(items: result.items, hasMore: result.hasMore, nextPage: result.nextPage)
     }
     
-    func fetchStarship(id: Int) async throws -> Starship {
+	public func fetchStarship(id: Int) async throws -> Starship {
         return try await genericRepository.fetchDetail(
             endpoint: .starshipDetail(id: id),
             id: id,
@@ -61,7 +61,7 @@ final class StarshipsRepository: StarshipsRepositoryProtocol {
         )
     }
     
-    func fetchStarshipByURL(url: String) async throws -> Starship {
+	public func fetchStarshipByURL(url: String) async throws -> Starship {
         return try await genericRepository.fetchByURL(
             url: url,
             cacheKey: starshipURLCacheKey(url: url)

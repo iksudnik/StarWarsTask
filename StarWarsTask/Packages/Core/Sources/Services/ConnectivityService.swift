@@ -2,7 +2,7 @@ import Foundation
 import Network
 
 /// Protocol that defines network connectivity monitoring capabilities
-protocol ConnectivityServiceProtocol {
+public protocol ConnectivityServiceProtocol {
 	/// Indicates whether device is connected to the internet
 	var isConnected: Bool { get }
 
@@ -11,15 +11,15 @@ protocol ConnectivityServiceProtocol {
 }
 
 /// Simple implementation of connectivity service
-final class ConnectivityService: ConnectivityServiceProtocol {
+public final class ConnectivityService: ConnectivityServiceProtocol {
 	private let monitor = NWPathMonitor()
 	private let queue = DispatchQueue(label: "ConnectivityService")
 
-	private(set) var isConnected = false
+	private(set) public var isConnected = false
 
 	private var continuation: AsyncStream<Bool>.Continuation?
 
-	lazy var connectivityUpdates: AsyncStream<Bool> = {
+	public lazy var connectivityUpdates: AsyncStream<Bool> = {
 		AsyncStream { continuation in
 			self.continuation = continuation
 			// Send the current status immediately upon subscription
@@ -31,7 +31,7 @@ final class ConnectivityService: ConnectivityServiceProtocol {
 		}
 	}()
 
-	init() {
+	public init() {
 		startMonitoring()
 	}
 

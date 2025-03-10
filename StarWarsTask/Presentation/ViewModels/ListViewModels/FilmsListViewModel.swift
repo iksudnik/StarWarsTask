@@ -6,6 +6,7 @@
 //
 
 import Core
+import Domain
 import SwiftUI
 
 final class FilmsListViewModel: BaseListViewModel<Film> {

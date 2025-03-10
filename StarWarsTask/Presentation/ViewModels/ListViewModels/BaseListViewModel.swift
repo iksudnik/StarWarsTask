@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import Core
+import Domain
 
 /// Base class for all list view models
 @MainActor

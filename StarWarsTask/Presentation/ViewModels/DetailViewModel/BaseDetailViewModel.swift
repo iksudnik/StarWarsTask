@@ -6,6 +6,7 @@
 //
 
 import Core
+import Domain
 import SwiftUI
 
 /// Base class for all detail view models

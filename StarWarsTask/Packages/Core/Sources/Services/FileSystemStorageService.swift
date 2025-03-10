@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol StorageServiceProtocol {
+public protocol StorageServiceProtocol {
     func save<T: Encodable>(_ object: T, forKey key: String) throws
     func load<T: Decodable>(forKey key: String) throws -> T
     func exists(forKey key: String) -> Bool
@@ -15,7 +15,7 @@ protocol StorageServiceProtocol {
 }
 
 /// Simple implementation of local storage using file system
-final class FileSystemStorageService: StorageServiceProtocol {
+public final class FileSystemStorageService: StorageServiceProtocol {
     private let fileManager = FileManager.default
     
     private var cacheDirectory: URL {
@@ -23,7 +23,7 @@ final class FileSystemStorageService: StorageServiceProtocol {
         return paths[0].appendingPathComponent("SWCache")
     }
     
-    init() {
+	public init() {
         createCacheDirIfNeeded()
     }
     
@@ -39,24 +39,24 @@ final class FileSystemStorageService: StorageServiceProtocol {
         }
     }
 
-    func save<T: Encodable>(_ data: T, forKey key: String) throws {
+	public func save<T: Encodable>(_ data: T, forKey key: String) throws {
         let fileURL = cacheDirectory.appendingPathComponent(key)
         let data = try JSONEncoder().encode(data)
         try data.write(to: fileURL)
     }
 
-    func load<T: Decodable>(forKey key: String) throws -> T {
+	public func load<T: Decodable>(forKey key: String) throws -> T {
         let fileURL = cacheDirectory.appendingPathComponent(key)
         let data = try Data(contentsOf: fileURL)
         return try JSONDecoder().decode(T.self, from: data)
     }
 
-    func exists(forKey key: String) -> Bool {
+	public func exists(forKey key: String) -> Bool {
         let fileURL = cacheDirectory.appendingPathComponent(key)
         return fileManager.fileExists(atPath: fileURL.path)
     }
     
-    func remove(forKey key: String) {
+	public func remove(forKey key: String) {
         let fileURL = cacheDirectory.appendingPathComponent(key)
         try? fileManager.removeItem(at: fileURL)
     }

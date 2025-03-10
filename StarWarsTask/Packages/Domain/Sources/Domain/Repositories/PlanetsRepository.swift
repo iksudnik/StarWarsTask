@@ -8,13 +8,13 @@
 import Foundation
 import Core
 
-protocol PlanetsRepositoryProtocol {
+public protocol PlanetsRepositoryProtocol {
     func fetchPlanets(page: Int, forceFetch: Bool) async throws -> RepositoryFetchResult<Planet>
     func fetchPlanet(id: Int) async throws -> Planet
     func fetchPlanetByURL(url: String) async throws -> Planet
 }
 
-final class PlanetsRepository: PlanetsRepositoryProtocol {
+public final class PlanetsRepository: PlanetsRepositoryProtocol {
     private let genericRepository: BaseRepository<PlanetDTO, Planet>
     
     private let planetsListCacheKey = "planets_list"
@@ -25,7 +25,7 @@ final class PlanetsRepository: PlanetsRepositoryProtocol {
         return "planet_url_\(url.hashValue)"
     }
     
-	init(
+	public init(
 		apiService: APIServiceProtocol,
 		cacheService: StorageServiceProtocol,
 		connectivityService: ConnectivityServiceProtocol
@@ -43,7 +43,7 @@ final class PlanetsRepository: PlanetsRepositoryProtocol {
         )
     }
     
-    func fetchPlanets(page: Int, forceFetch: Bool) async throws -> RepositoryFetchResult<Planet> {
+	public func fetchPlanets(page: Int, forceFetch: Bool) async throws -> RepositoryFetchResult<Planet> {
         let result = try await genericRepository.fetchList(
             endpoint: .planets,
             page: page,
@@ -53,7 +53,7 @@ final class PlanetsRepository: PlanetsRepositoryProtocol {
 		return .init(items: result.items, hasMore: result.hasMore, nextPage: result.nextPage)
     }
     
-    func fetchPlanet(id: Int) async throws -> Planet {
+	public func fetchPlanet(id: Int) async throws -> Planet {
         return try await genericRepository.fetchDetail(
             endpoint: .planetDetail(id: id),
             id: id,
@@ -61,7 +61,7 @@ final class PlanetsRepository: PlanetsRepositoryProtocol {
         )
     }
     
-    func fetchPlanetByURL(url: String) async throws -> Planet {
+	public func fetchPlanetByURL(url: String) async throws -> Planet {
         return try await genericRepository.fetchByURL(
             url: url,
             cacheKey: planetURLCacheKey(url: url)

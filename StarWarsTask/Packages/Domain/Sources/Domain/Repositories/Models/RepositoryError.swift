@@ -8,7 +8,7 @@
 import Core
 import Foundation
 
-enum RepositoryError: Error {
+public enum RepositoryError: Error {
     case apiError(String)
     case cacheError(String)
     case noInternetNoCache

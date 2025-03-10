@@ -6,6 +6,7 @@
 //
 
 import Core
+import Domain
 import SwiftUI
 
 final class SpeciesListViewModel: BaseListViewModel<Species> {
