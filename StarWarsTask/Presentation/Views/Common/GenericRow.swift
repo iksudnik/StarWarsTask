@@ -5,7 +5,7 @@
 //  Created by Ilja Sudnik on 08.03.2025.
 //
 
-
+import Core
 import SwiftUI
 
 struct GenericRow: View {

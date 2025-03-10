@@ -5,10 +5,11 @@
 //  Created by Ilja Sudnik on 09.03.2025.
 //
 
+import Core
 import SwiftUI
 
 @MainActor
-class PersonDetailViewModel: BaseDetailViewModel {
+final class PersonDetailViewModel: BaseDetailViewModel {
     private let person: Person
     
     init(

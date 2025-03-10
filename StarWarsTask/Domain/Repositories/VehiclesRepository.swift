@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Core
 
 protocol VehiclesRepositoryProtocol {
     func fetchVehicles(page: Int, forceFetch: Bool) async throws -> RepositoryFetchResult<Vehicle>

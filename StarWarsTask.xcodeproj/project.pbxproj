@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		A53E859E2D7EC43C00FDC853 /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = A53E859D2D7EC43C00FDC853 /* Core */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		A50AA1A72D7CC1B70010D630 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -33,6 +37,7 @@
 		A5F4D30A2D7DB17600F1EC08 /* Exceptions for "StarWarsTask" folder in "StarWarsTask" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Packages/Core,
 				Resources/Info.plist,
 			);
 			target = A50AA1952D7CC1B60010D630 /* StarWarsTask */;
@@ -65,6 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A53E859E2D7EC43C00FDC853 /* Core in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +131,7 @@
 			);
 			name = StarWarsTask;
 			packageProductDependencies = (
+				A53E859D2D7EC43C00FDC853 /* Core */,
 			);
 			productName = StarWarsTask;
 			productReference = A50AA1962D7CC1B60010D630 /* StarWarsTask.app */;
@@ -208,6 +215,9 @@
 			);
 			mainGroup = A50AA18D2D7CC1B60010D630;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				A53E859C2D7EC43C00FDC853 /* XCLocalSwiftPackageReference "StarWarsTask/Core" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A50AA1972D7CC1B60010D630 /* Products */;
 			projectDirPath = "";
@@ -571,6 +581,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		A53E859C2D7EC43C00FDC853 /* XCLocalSwiftPackageReference "StarWarsTask/Core" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = StarWarsTask/Core;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A53E859D2D7EC43C00FDC853 /* Core */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Core;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A50AA18E2D7CC1B60010D630 /* Project object */;
 }

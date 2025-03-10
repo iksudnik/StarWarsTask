@@ -5,7 +5,7 @@
 //  Created by Ilja Sudnik on 09.03.2025.
 //
 
-import Foundation
+import Core
 import SwiftUI
 
 final class VehiclesListViewModel: BaseListViewModel<Vehicle> {

@@ -5,10 +5,11 @@
 //  Created by Ilja Sudnik on 09.03.2025.
 //
 
+import Core
 import SwiftUI
 
 @MainActor
-class VehicleDetailViewModel: BaseDetailViewModel {
+final class VehicleDetailViewModel: BaseDetailViewModel {
     private let vehicle: Vehicle
     
     init(

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Core
 
 protocol FilmsRepositoryProtocol {
 	func fetchFilms(page: Int, forceFetch: Bool) async throws -> RepositoryFetchResult<Film>

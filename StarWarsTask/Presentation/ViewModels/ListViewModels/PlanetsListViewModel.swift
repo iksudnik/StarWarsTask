@@ -5,10 +5,10 @@
 //  Created by Ilja Sudnik on 09.03.2025.
 //
 
-import Foundation
+import Core
 import SwiftUI
 
-class PlanetsListViewModel: BaseListViewModel<Planet> {
+final class PlanetsListViewModel: BaseListViewModel<Planet> {
 	private let repository: PlanetsRepositoryProtocol
 
 	init(

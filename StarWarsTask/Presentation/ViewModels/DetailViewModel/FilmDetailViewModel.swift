@@ -5,11 +5,11 @@
 //  Created by Ilja Sudnik on 08.03.2025.
 //
 
-import Foundation
+import Core
 import SwiftUI
 
 @MainActor
-class FilmDetailViewModel: BaseDetailViewModel {
+final class FilmDetailViewModel: BaseDetailViewModel {
     private let film: Film
     
     init(

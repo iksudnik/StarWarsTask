@@ -5,10 +5,10 @@
 //  Created by Ilja Sudnik on 09.03.2025.
 //
 
-import Foundation
+import Core
 import SwiftUI
 
-class StarshipsListViewModel: BaseListViewModel<Starship> {
+final class StarshipsListViewModel: BaseListViewModel<Starship> {
 	private let repository: StarshipsRepositoryProtocol
 
 	init(

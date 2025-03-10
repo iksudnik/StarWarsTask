@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Core
 
 protocol PeopleRepositoryProtocol {
     func fetchPeople(page: Int, forceFetch: Bool) async throws -> RepositoryFetchResult<Person>

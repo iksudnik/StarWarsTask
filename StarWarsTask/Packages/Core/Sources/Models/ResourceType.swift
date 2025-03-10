@@ -5,7 +5,9 @@
 //  Created by Ilja Sudnik on 08.03.2025.
 //
 
-enum ResourceType: CaseIterable {
+import Foundation
+
+public enum ResourceType: CaseIterable {
 	case film
 	case person
 	case planet

@@ -5,9 +5,10 @@
 //  Created by Ilja Sudnik on 09.03.2025.
 //
 
+import Core
 import SwiftUI
 
-class PeopleListViewModel: BaseListViewModel<Person> {
+final class PeopleListViewModel: BaseListViewModel<Person> {
     private let repository: PeopleRepositoryProtocol
 
     init(repository: PeopleRepositoryProtocol, connectivityService: ConnectivityServiceProtocol) {

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Core
 
 protocol PlanetsRepositoryProtocol {
     func fetchPlanets(page: Int, forceFetch: Bool) async throws -> RepositoryFetchResult<Planet>

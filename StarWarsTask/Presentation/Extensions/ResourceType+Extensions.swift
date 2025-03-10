@@ -5,6 +5,8 @@
 //  Created by Ilja Sudnik on 09.03.2025.
 //
 
+import Core
+
 extension ResourceType {
 	var title: String {
 		switch self {

@@ -5,6 +5,7 @@
 //  Created by Ilja Sudnik on 09.03.2025.
 //
 
+import Core
 import SwiftUI
 
 /// Base class for all detail view models

@@ -5,7 +5,7 @@
 //  Created by Ilja Sudnik on 08.03.2025.
 //
 
-import Foundation
+import Core
 import SwiftUI
 
 final class FilmsListViewModel: BaseListViewModel<Film> {

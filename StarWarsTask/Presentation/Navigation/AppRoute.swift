@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Core
 
 enum AppRoute: Hashable, Identifiable {
     case dashboard

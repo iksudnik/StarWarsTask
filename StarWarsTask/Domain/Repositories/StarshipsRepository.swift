@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Core
 
 protocol StarshipsRepositoryProtocol {
     func fetchStarships(page: Int, forceFetch: Bool) async throws -> RepositoryFetchResult<Starship>

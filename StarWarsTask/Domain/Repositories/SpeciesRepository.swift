@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Core
 
 protocol SpeciesRepositoryProtocol {
     func fetchSpecies(page: Int, forceFetch: Bool) async throws -> RepositoryFetchResult<Species>
