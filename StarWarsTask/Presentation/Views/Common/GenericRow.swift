@@ -31,6 +31,7 @@ struct GenericRow: View {
             .font(.subheadline)
             .foregroundColor(AppColors.secondaryText)
         }
+		.contentShape(Rectangle())
         .padding(.vertical, 4)
     }
 }
