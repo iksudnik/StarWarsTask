@@ -12,7 +12,7 @@ Star Wars Explorer is an iOS application built to showcase state-of-the-art arch
 
 ## Architecture
 
-The application follows the **MVVM (Model-View-ViewModel)** architecture pattern with a modular approach:
+The application follows the **MVVM (Model-View-ViewModel)** architecture pattern with a modular approach.
 
 ## Technologies
 
@@ -20,6 +20,7 @@ The application follows the **MVVM (Model-View-ViewModel)** architecture pattern
 - **SwiftUI**: Modern declarative UI framework
 - **Swift Concurrency**: Async/await pattern for network calls
 - **Combine**: For reactive programming needs
+- **Swift Package Manager**: For modular architecture with local packages
 - **URLSession**: For network requests
 - **FileManager**: For local data persistence
 - **NWPathMonitor**: For network connectivity monitoring
@@ -33,6 +34,14 @@ The application follows the **MVVM (Model-View-ViewModel)** architecture pattern
 1. Clone the repository
 2. Open the project in Xcode
 3. Build and run the application
+
+## Future Improvements
+
+The following enhancements are planned for future development:
+
+1. **Modularization of Presentation Layer**: Move the Presentation layer into a separate Swift Package to further improve separation of concerns and build times.
+2. **Test Coverage**: Add comprehensive unit tests for the Domain layer to ensure reliability and facilitate future refactoring.
+3. **Dynamic Text Support**: Improve accessibility by adapting the UI to support dynamic font sizes and text settings.
 
 ---
 
