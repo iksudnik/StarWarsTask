@@ -27,6 +27,9 @@ final class DependencyContainer: ObservableObject {
     
     // Factories
     let viewModelFactory: ViewModelFactoryProtocol
+    
+    // Navigation
+	private(set) lazy var destinationBuilder = ViewDestinationBuilder(viewModelFactory: viewModelFactory)
 
 	init(
 		apiService: APIServiceProtocol,
@@ -97,4 +100,4 @@ final class DependencyContainer: ObservableObject {
 			connectivityService: connectivityService
         )
     }
-} 
+}

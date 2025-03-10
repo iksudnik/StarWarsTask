@@ -11,15 +11,11 @@ struct MainNavigationView: View {
     @EnvironmentObject private var container: DependencyContainer
     @StateObject private var router = Router()
     
-    private var destinationBuilder: ViewDestinationBuilder {
-        ViewDestinationBuilder(container: container)
-    }
-    
     var body: some View {
         NavigationStack(path: $router.navigationPath) {
             DashboardView()
-                .navigationDestination(for: AppRoute.self) { viewSpec in
-                    destinationBuilder.buildDestination(for: viewSpec)
+                .navigationDestination(for: AppRoute.self) { route in
+                    container.destinationBuilder.buildDestination(for: route)
                 }
         }
         .environmentObject(router)
