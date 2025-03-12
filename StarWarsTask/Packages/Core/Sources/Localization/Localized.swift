@@ -23,6 +23,7 @@ public enum Localized {
         public static let noDataAvailable = "No Data Available"
         public static let dataWillAppearHere = "Data will appear here once loaded"
         public static let tryAgain = "Try Again"
+		public static let watchOpeningCrawl = "Watch Opening Crawl"
     }
 
 	// MARK: - Common details strings

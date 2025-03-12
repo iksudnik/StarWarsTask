@@ -12,6 +12,8 @@ struct FilmDetailView: View {
 	@ObservedObject var viewModel: FilmDetailViewModel
 	@EnvironmentObject var container: DependencyContainer
 	@EnvironmentObject var router: Router
+	
+	@State private var showCrawl = false
 
 	var body: some View {
 		ScrollView {
@@ -31,6 +33,10 @@ struct FilmDetailView: View {
 		}
 		.navigationTitle(viewModel.title)
 		.navigationBarTitleDisplayMode(.large)
+		.sheet(isPresented: $showCrawl) {
+			OpeningCrawlView(
+				text: viewModel.openingCrawl)
+		}
 		.task {
 			await viewModel.loadRelatedData()
 		}
@@ -50,11 +56,30 @@ private extension FilmDetailView {
 				DetailInfoRow(label: Localized.Film.releaseDate, value: viewModel.releaseDate)
 			}
 
-			DetailInfoSection(title: Localized.Film.openingCrawl) {
-				Text(viewModel.openingCrawl)
-					.font(.body)
-					.foregroundColor(.secondary)
+			openingCrawlButton
+		}
+	}
+
+	var openingCrawlButton: some View {
+		HStack {
+			Spacer()
+
+			Button(action: {
+				showCrawl = true
+			}) {
+				HStack {
+					Image(systemName: "play.fill")
+					Text(Localized.UI.watchOpeningCrawl)
+				}
+				.padding(.vertical, 8)
+				.padding(.horizontal, 16)
+				.background(AppColors.accent)
+				.foregroundColor(.black)
+				.cornerRadius(8)
 			}
+			.padding(.top, 12)
+			
+			Spacer()
 		}
 	}
 
